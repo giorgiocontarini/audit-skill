@@ -49,7 +49,34 @@ rg -n "SECRET|TOKEN|PASSWORD|KEY|CORS|COOKIE|JWT|OTP|OAUTH|WEBHOOK|ALLOW_PUBLIC_
 rg -n "scheduler|BackgroundScheduler|cron|celery|rq|apscheduler|health|readiness|liveness" .
 rg -n "httpx|requests|fetch\\(|axios|webhook|oauth|auth" .
 rg -n "SessionMiddleware|CORSMiddleware|set_cookie|Authorization|Bearer|SameSite|Secure|HttpOnly" .
+rg -n "innerHTML|dangerouslySetInnerHTML|document\\.write" .
 ```
+
+## Qualys / WAS / DAST triage (no extra slug)
+
+When the user imports a Qualys scan report, orchestrate **existing** commands —
+do not invent a new audit slug. Static repo review does not replace Qualys;
+live payload replay requires `pentest` phase 2 with explicit authorization.
+
+| Qualys group / QID (typical) | Run slug(s) | Repo focus |
+|-----------------------------|-------------|------------|
+| Reflected chars / XSS (150084) | `api`, then `security` | Public query echo; JSON must not reflect raw input |
+| DOM XSS (150938) | `security`, optional `pentest` (phase 2) | `innerHTML` sinks; cookie/URL taint to DOM |
+| SQL injection | `security`, `api` | Parameterized SQL / ORM |
+| Path manipulation (150622) | `pentest`, `operability` | Middleware/nginx; forbidden path segments |
+| Cookie flags (150122, 150123, 150277, 150319) | `security`, `privacy` | `set_cookie`, `document.cookie` |
+| Security headers (150135, 150245, 531928–531932) | `operability`, `cloud` | nginx, CDN, Fastify/Next headers |
+| Server disclosure (150210, 150520) | `operability` | `server_tokens`, `X-Powered-By` |
+| SRI (150261) | `supply-chain`, `security` | Third-party `<script integrity=` |
+| Cache-Control (150249) | `api`, `operability` | Sensitive routes must not be public-cacheable |
+| PII on forms (150375) | `privacy`, `security` | Public forms and logs |
+| TLS / cert (38xxx) | `cloud` | Termination at CDN/ALB vs origin |
+
+Suggested order after a Qualys drop: `api` → `security` → `pentest` (phase 1)
+→ `operability` / `cloud` as needed → `verify` or external re-scan.
+
+Report addendum: QID → fixed / accepted / N/A / needs re-scan; call out
+findings only Qualys can see (CMP/GA cookies, CDN-only headers).
 
 Before step 3, identify the target repo's actual auth library,
 session/cookie mechanism, secret-loading approach, scheduler/queue

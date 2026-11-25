@@ -14,6 +14,9 @@ logic of its own — it delegates to bundled local methodology files.
 
 ## Notes
 
+- Qualys / WAS / DAST reports: stay on this slug for triage (mapping table in
+  `methodologies/security/generic.md`); delegate line-items to `api`, `pentest`,
+  `operability`, `cloud`, `privacy`, `supply-chain` as the table indicates.
 - Keep the "fewer high-confidence findings over many speculative ones"
   standard from the selected bundled file regardless of which branch is
   taken.

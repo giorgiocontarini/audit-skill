@@ -27,6 +27,17 @@ Then inspect:
 - webhook signatures and replay protection
 - timeout/retry and debug endpoints
 
+### Qualys WAS (API-related QIDs)
+
+If triaging a Qualys report, prioritize:
+
+- **150084** — query/body must not be echoed in JSON/HTML; invalid params → 4xx
+  without reflecting attacker input.
+- **150249** — `Cache-Control` on public routes (stats, SEO) must match sensitivity.
+- SQLi classes — parameterized queries on every user-controlled filter.
+
+Cross-slug: DOM/cookies → `security`; path fuzz → `pentest` phase 1.
+
 ## Output
 
 Standard mode: per `bootstrap-lite.md`'s 4-section format. Formal mode: follow `audit/reference/output-contract.md`.

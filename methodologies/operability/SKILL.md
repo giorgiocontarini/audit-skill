@@ -25,6 +25,10 @@ Then inspect:
 - dead-letter/recovery patterns
 - rollback/runbook/incident-response evidence
 - diagnostic affordances
+- reverse-proxy hardening (Qualys **150210**, **150520**, **150135**, **150245**,
+  COEP/COOP/CORP): `server_tokens`, hide `Server` / `X-Powered-By`, HSTS at
+  CDN+origin, intentional exceptions (e.g. CMP iframe pages with CSP
+  `frame-ancestors` instead of XFO)
 
 ## Output
 

@@ -23,6 +23,8 @@ Then inspect:
 - data in logs
 - third-party data sharing
 - PII sent to models/providers when present
+- Qualys **150375** (PII fields on forms): distinguish required business fields
+  (e.g. email on “pubblica offerta”) from accidental collection in logs/analytics
 
 Always distinguish:
 
